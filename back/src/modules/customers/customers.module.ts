@@ -13,7 +13,7 @@ import { WithdrawUseCase } from './application/use-cases/withdraw.uc';
 
 import { PrismaCustomerRepository } from './infra/prisma-customer.repository';
 import { PrismaLedgerRepository } from './infra/prisma-ledger.repository';
-import { PrismaUnitOfWork } from './infra/prisma-unit-of-work-prisma';
+import { PrismaUnitOfWork } from './infra/prisma-unit-of-work';
 
 import { CustomerRepository } from './domain/ports/customer.repository';
 import { LedgerRepository } from './domain/ports/ledger.repository';
