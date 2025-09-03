@@ -1,156 +1,121 @@
+
 # 🏦 Itaú Customer Management System
 
-Sistema completo de gerenciamento de clientes com funcionalidades financeiras, desenvolvido com **NestJS** (backend) e **Angular** (frontend).
+Sistema de gerenciamento de clientes com operações financeiras, desenvolvido em **NestJS** (backend) e **Angular** (frontend).
 
-## 📋 Índice
+## 📚 Índice
 
-- [Visão Geral](#visão-geral)
-- [Arquitetura](#arquitetura)
-- [Tecnologias](#tecnologias)
-- [Instalação e Configuração](#instalação-e-configuração)
-- [Backend (API)](#backend-api)
-- [Frontend (Web App)](#frontend-web-app)
-- [Funcionalidades](#funcionalidades)
-- [API Endpoints](#api-endpoints)
-- [Testes](#testes)
-- [Deployment](#deployment)
-- [Contribuição](#contribuição)
+* [Visão Geral](#visão-geral)
+* [Estrutura do Repositório](#estrutura-do-repositório)
+* [Stack Tecnológico](#stack-tecnológico)
+* [Guia Rápido (TL;DR)](#guia-rápido-tldr)
+* [Configuração Detalhada](#configuração-detalhada)
+* [Arquitetura](#arquitetura)
+* [Funcionalidades & Status](#funcionalidades--status)
+* [API (resumo)](#api-resumo)
+* [Testes & Qualidade](#testes--qualidade)
+* [Deploy (resumo)](#deploy-resumo)
+* [Roadmap](#roadmap)
+* [Contribuição](#contribuição)
+* [Autor](#autor)
 
 ---
 
 ## 🎯 Visão Geral
 
-O **Itaú Customer Management System** é uma aplicação full-stack que permite:
+Aplicação full-stack para:
 
-- **Gerenciamento completo de clientes** (CRUD)
-- **Operações financeiras** (depósitos e saques)
-- **Sistema de auditoria** completo
-- **Dashboard analítico** com métricas em tempo real
-- **Autenticação JWT** segura
-- **Interface moderna** e responsiva
+* **CRUD de clientes**
+* **Depósitos e saques** com regras de negócio consistentes
+* **Autenticação JWT**
+* **Auditoria financeira** (base para ledger/idempotência)
+
+> **Dev** usa **SQLite + Prisma**. É possível apontar para Postgres em **staging/prod** sem mudanças de código (apenas `DATABASE_URL`).
 
 ---
 
-## 🏗️ Arquitetura
+## 🧭 Estrutura do Repositório
 
-### Arquitetura Geral
 ```
-┌─────────────────┐    HTTP/REST    ┌─────────────────┐
-│                 │ ◄────────────► │                 │
-│  Angular SPA    │                │   NestJS API    │
-│  (Frontend)     │                │   (Backend)     │
-│                 │                │                 │
-└─────────────────┘                └─────┬───────────┘
-                                         │
-                                         ▼
-                                   ┌─────────────┐
-                                   │   SQLite    │
-                                   │ (Database)  │
-                                   └─────────────┘
-```
-
-### Backend Architecture (Clean Architecture)
-```
-┌─────────────────────────────────────────────────────┐
-│                   Presentation Layer                │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐   │
-│  │ Controllers │ │ Interceptors│ │   Guards    │   │
-│  └─────────────┘ └─────────────┘ └─────────────┘   │
-└─────────────────────┬───────────────────────────────┘
-                      │
-┌─────────────────────▼───────────────────────────────┐
-│                Application Layer                    │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐   │
-│  │ Use Cases   │ │     DTOs    │ │ Validators  │   │
-│  └─────────────┘ └─────────────┘ └─────────────┘   │
-└─────────────────────┬───────────────────────────────┘
-                      │
-┌─────────────────────▼───────────────────────────────┐
-│                  Domain Layer                       │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐   │
-│  │  Entities   │ │Value Objects│ │   Ports     │   │
-│  └─────────────┘ └─────────────┘ └─────────────┘   │
-└─────────────────────┬───────────────────────────────┘
-                      │
-┌─────────────────────▼───────────────────────────────┐
-│               Infrastructure Layer                  │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐   │
-│  │  Prisma     │ │ Repositories│ │   Services  │   │
-│  └─────────────┘ └─────────────┘ └─────────────┘   │
-└─────────────────────────────────────────────────────┘
+.
+├── back/                  # API NestJS (Prisma, JWT, Swagger, testes)
+└── front/                 # SPA Angular (Material, Signals)
 ```
 
 ---
 
-## 🚀 Tecnologias
+## 🧱 Stack Tecnológico
 
-### Backend
-- **Framework**: NestJS 10+
-- **Runtime**: Node.js 18+
-- **Database**: SQLite (Prisma ORM)
-- **Authentication**: JWT
-- **Validation**: Zod + class-validator
-- **Testing**: Jest
-- **Documentation**: Swagger/OpenAPI
+**Backend (NestJS)**
 
-### Frontend
-- **Framework**: Angular 18+
-- **UI Library**: Angular Material 18
-- **State Management**: Angular Signals
-- **HTTP Client**: Angular HttpClient
-- **Styling**: SCSS + Material Design 3
-- **Build Tool**: Angular CLI
+* Node 18+, NestJS 10+
+* Prisma ORM (SQLite em dev; Postgres recomendado em prod)
+* Auth JWT, validação (class-validator / Zod)
+* Swagger/OpenAPI
+* Jest (unit/integration)
 
-### DevOps & Tools
-- **Package Manager**: npm
-- **Version Control**: Git
-- **Database Migrations**: Prisma Migrate
-- **API Testing**: Swagger UI
-- **Code Quality**: ESLint, Prettier
+**Frontend (Angular)**
+
+* Angular 18+, Angular Material
+* Angular Signals, Lazy Loading
+* SCSS
+
+**Dev & Qualidade**
+
+* ESLint, Prettier
+* Scripts NPM padronizados
+* (Opcional) Sentry / métricas via endpoints
 
 ---
 
-## 📦 Instalação e Configuração
+## ⚡ Guia Rápido (TL;DR)
 
-### Pré-requisitos
-- Node.js 18+ e npm
-- Git
+### 1) Clonar
 
-### 1. Clone o repositório
 ```bash
 git clone <repository-url>
 cd itau-customer-management
 ```
 
-### 2. Configuração do Backend
+### 2) Backend
+
 ```bash
 cd back
 npm install
-
-# Configurar variáveis de ambiente
-cp .env.example .env
-# Editar .env com suas configurações
+cp .env.example .env   # Ajuste as variáveis
+npx prisma migrate dev
+npm run start:dev      # http://localhost:3000  (Swagger em /api/v1/docs)
 ```
 
-**Exemplo do arquivo `.env`:**
+### 3) Frontend
+
+```bash
+cd ../front
+npm install
+npm start              # http://localhost:4200
+```
+
+---
+
+## 🔧 Configuração Detalhada
+
+### `.env` (backend – exemplo)
+
 ```env
 NODE_ENV=development
 PORT=3000
 API_PREFIX=api/v1
 API_VERSION=1.0.0
 
-# Database
+# DB (dev: SQLite; prod: Postgres/Aurora)
 DATABASE_PROVIDER=sqlite
 DATABASE_URL="file:./dev.db"
 
 # JWT
-JWT_SECRET=your-super-secret-jwt-key-32-chars-minimum
+JWT_SECRET=your-32-char-min-secret
 JWT_EXPIRES_IN=1h
-JWT_REFRESH_SECRET=your-super-secret-refresh-key-32-chars
+JWT_REFRESH_SECRET=your-32-char-min-refresh
 JWT_REFRESH_EXPIRES_IN=7d
-
-# Encryption
-ENCRYPTION_KEY=your-64-char-hex-encryption-key-or-32-byte-base64
 
 # Security
 BCRYPT_ROUNDS=12
@@ -162,259 +127,208 @@ FEATURE_METRICS_ENABLED=true
 FEATURE_HEALTH_CHECK_ENABLED=true
 ```
 
-### 3. Configuração do banco de dados
+### Scripts úteis (backend)
+
 ```bash
-# Executar migrações
-npx prisma migrate dev
-
-# (Opcional) Popular dados iniciais
-npx prisma db seed
-```
-
-### 4. Iniciar o backend
-```bash
-npm run start:dev
-# API estará disponível em http://localhost:3000
-# Swagger UI em http://localhost:3000/api/v1/docs
-```
-
-### 5. Configuração do Frontend
-```bash
-cd ../front
-npm install
-
-# Iniciar desenvolvimento
-npm start
-# App estará disponível em http://localhost:4200
+npm run start:dev         # dev
+npm run build             # build prod
+npm run start:prod        # start prod
+npm run test              # unit tests
+npm run test:cov          # coverage
+npm run test:watch        # watch
 ```
 
 ---
 
-## 🔧 Backend (API)
+## 🏗️ Arquitetura
 
-### Estrutura de Diretórios
+### 1) Camadas da Aplicação
+
+```mermaid
+flowchart TD
+  subgraph Frontend
+    A["Angular 18 (SPA)"]
+  end
+  subgraph Backend_NestJS
+    B[Controllers/Guards]
+    C["Use Cases / Application"]
+    D["Domain\nEntities & Value Objects (Money em centavos)"]
+    E["Infra/Adapters (Prisma, Repos, Providers)"]
+  end
+  subgraph Data
+    F["DB (dev: SQLite | prod: Postgres/Aurora)"]
+    G["Redis (cache/rate-limit) [opcional]"]
+    H["SQS (assíncrono) [opcional]"]
+    I["Ledger/Idempotency Store [opcional]"]
+  end
+
+  A -->|JWT| B
+  B --> C --> D --> E
+  E -->|ORM| F
+  E -->|cache| G
+  E -->|eventos| H
+  C -->|auditoria| I
+
+  classDef layer fill:#f6f8fa,stroke:#bbb,rx:6,ry:6;
+  class A,B,C,D,E,F,G,H,I layer;
 ```
-back/
-├── src/
-│   ├── app.module.ts
-│   ├── main.ts
-│   ├── config/                    # Configurações
-│   │   ├── configs/
-│   │   ├── env.schema.ts
-│   │   └── configuration.module.ts
-│   ├── modules/
-│   │   ├── auth/                  # Autenticação
-│   │   └── customers/             # Módulo de clientes
-│   │       ├── application/       # Use Cases e DTOs
-│   │       ├── domain/           # Entidades e Interfaces
-│   │       ├── infra/            # Implementações
-│   │       └── presentation/     # Controllers
-│   ├── shared/                   # Utilitários compartilhados
-│   │   ├── infrastructure/
-│   │   ├── security/
-│   │   └── validations/
-│   └── guards/                   # Guards de autenticação
-├── prisma/                       # Esquemas e migrações
-└── test/                        # Testes
+
+**Decisões de domínio**
+
+* **Money em centavos (integer)** para evitar erros de ponto flutuante
+* **Transações** em operações de débito/crédito
+* **Idempotência** para replays de requisições financeiras
+* **Ledger** para trilha de auditoria (planejado/expansível)
+
+### 2) (Opcional) Desenho de Escala na AWS
+
+> Esta visão é **opcional** para produção e segue boas práticas do case.
+
+```mermaid
+flowchart TD
+  subgraph EDGE["Edge"]
+    R53[Route 53 (DNS)]
+    CF[CloudFront (2 origens)]
+    WAF[WAF (regras gerenciadas + rate)]
+    R53 --> CF --> WAF
+  end
+
+  subgraph ORIGINS["CloudFront Origins"]
+    S3SPA[S3 (Angular SPA)]
+    ALB[ALB (HTTP/HTTPS)]
+    CF -- "/, /assets/*" --> S3SPA
+    CF -- "/api/*" --> ALB
+  end
+
+  subgraph VPC["VPC (isolada)"]
+    subgraph PUB["Subnets Públicas"]
+      ALB
+    end
+    subgraph PRIV["Subnets Privadas"]
+      ECS[ECS Fargate: NestJS]
+      RDSP[(Aurora Postgres + RDS Proxy)]
+      REDIS[(ElastiCache Redis)]
+      SQS[(SQS)]
+      SM[(Secrets Manager)]
+      CW[(CloudWatch Logs/Metrics)]
+      XR[(X-Ray/Tracing)]
+      VPCE[VPC Endpoints]
+    end
+    ALB --> ECS
+    ECS --> RDSP
+    ECS --> REDIS
+    ECS --> SQS
+    ECS --> SM
+    ECS --> CW
+    ECS --> XR
+    ECS --> VPCE
+  end
+
+  USER[Usuário] --> R53
 ```
-
-### Principais Características
-
-#### 🏛️ Domain-Driven Design (DDD)
-- **Entidades**: Representam objetos de negócio (`Customer`)
-- **Value Objects**: Objetos imutáveis (`Money`)
-- **Use Cases**: Lógica de negócio (`DepositUseCase`, `WithdrawUseCase`)
-- **Repositories**: Abstração de persistência
-- **Unit of Work**: Gerenciamento de transações
-
-#### 🔒 Segurança
-- **JWT Authentication**: Tokens seguros com expiração
-- **Password Hashing**: bcrypt com salt configurável
-- **Request Validation**: Validação rigorosa de entrada
-- **Rate Limiting**: Proteção contra spam
-- **CORS**: Configuração adequada para produção
-
-#### 💰 Sistema Financeiro
-- **Precisão**: Valores armazenados em centavos (evita problemas de ponto flutuante)
-- **Idempotência**: Chaves de idempotência para operações críticas
-- **Auditoria**: Log completo de todas as transações
-- **Controle de Concorrência**: Versioning otimista para evitar race conditions
-
-#### 📊 Monitoramento
-- **Logging Estruturado**: Winston para logs em produção
-- **Health Checks**: Endpoints para monitoramento
-- **Error Tracking**: Integração com Sentry (opcional)
-- **Métricas**: Coleta de métricas de performance
 
 ---
 
-## 🖥️ Frontend (Web App)
+## ✅ Funcionalidades & Status
 
-### Estrutura de Diretórios
-```
-front/
-├── src/
-│   ├── app/
-│   │   ├── core/                 # Serviços centrais
-│   │   │   ├── guards/
-│   │   │   ├── interceptors/
-│   │   │   └── services/
-│   │   ├── features/             # Módulos por funcionalidade
-│   │   │   ├── auth/
-│   │   │   ├── customers/
-│   │   │   └── dashboard/
-│   │   ├── shared/               # Componentes compartilhados
-│   │   │   └── pipes/
-│   │   └── app.component.*
-│   ├── environments/
-│   └── styles.scss
-```
+### Implementadas
 
-### Principais Características
+* 👥 **Clientes**: criar, listar, obter, atualizar, desativar (soft delete)
+* 🔐 **Autenticação JWT** (login/guards)
+* 💸 **Depósito/Saque** com validações e precisão em **centavos**
+* 🧪 **Swagger** (docs), **Health Check** (flag), **logs básicos**
+* 🧭 **Angular SPA** com Material/Signals, interceptors de auth
 
-#### 🎨 Design System
-- **Material Design 3**: Interface moderna e consistente
-- **Responsividade**: Adaptação completa a diferentes dispositivos
-- **Tema Customizado**: Paleta de cores Itaú
-- **Componentes Reutilizáveis**: Biblioteca de componentes próprios
+### Em andamento / Planejadas
 
-#### ⚡ Performance
-- **Standalone Components**: Reduz bundle size
-- **Lazy Loading**: Carregamento sob demanda de módulos
-- **OnPush Strategy**: Otimização de change detection
-- **Angular Signals**: Estado reativo e performático
+* 🧾 **Ledger** completo de transações + **idempotência** persisitida
+* 🧱 **Rate limiting** e **cache** via Redis
+* 📈 **Dashboard analítico** e gráficos
+* 🧳 **Jobs assíncronos** (SQS/Bull)
+* 🔍 **Observabilidade** (métricas/tracing avançado)
+* 🐳 **Containerização** e **CI/CD** completos
 
-#### 🔐 Autenticação
-- **JWT Integration**: Interceptors automáticos
-- **Route Guards**: Proteção de rotas privadas
-- **Session Management**: Controle de sessão no localStorage
-- **Auto-redirect**: Redirecionamento inteligente após login
-
-#### 📊 Dashboard
-- **Métricas em Tempo Real**: Estatísticas atualizadas
-- **Cards Interativos**: Interface intuitiva e moderna
-- **Gráficos**: Visualização de dados (preparado para charts)
-- **Ações Rápidas**: Acesso direto às funcionalidades principais
+> Mantive apenas como “implementado” o que é típico no seu código atual; os demais ficaram como **planejado** para não superprometer.
 
 ---
 
-## ✨ Funcionalidades
+## 📡 API (resumo)
 
-### 👥 Gerenciamento de Clientes
-- [x] **Criar cliente** com validação de CPF
-- [x] **Listar clientes** com paginação e filtros
-- [x] **Visualizar detalhes** do cliente
-- [x] **Editar informações** do cliente
-- [x] **Desativar cliente** (soft delete)
+### Auth
 
-### 💳 Operações Financeiras
-- [x] **Depositar dinheiro** com validação de valores
-- [x] **Sacar dinheiro** com verificação de saldo
-- [x] **Histórico de transações** completo
-- [x] **Controle de concorrência** em operações
-- [x] **Idempotência** para evitar duplicatas
-
-### 📈 Dashboard e Relatórios
-- [x] **Métricas gerais** (total de clientes, saldo total, etc.)
-- [x] **Indicadores de performance** com trends
-- [x] **Resumo financeiro** por cliente
-- [ ] **Relatórios exportáveis** (planned)
-- [ ] **Gráficos interativos** (planned)
-
-### 🔧 Sistema
-- [x] **Autenticação JWT** segura
-- [x] **Validação robusta** de dados
-- [x] **Error handling** centralizado
-- [x] **Logging estruturado**
-- [x] **Health checks** para monitoramento
-
----
-
-## 📡 API Endpoints
-
-### Autenticação
-```http
+```
 POST /api/v1/auth/token
 ```
 
 ### Clientes
-```http
-GET    /api/v1/clientes          # Listar clientes
-POST   /api/v1/clientes          # Criar cliente
-GET    /api/v1/clientes/:id      # Obter cliente
-PUT    /api/v1/clientes/:id      # Atualizar cliente
-DELETE /api/v1/clientes/:id      # Desativar cliente
+
+```
+GET    /api/v1/clientes
+POST   /api/v1/clientes
+GET    /api/v1/clientes/:id
+PUT    /api/v1/clientes/:id
+DELETE /api/v1/clientes/:id
 ```
 
 ### Operações Financeiras
-```http
-POST /api/v1/clientes/:id/depositar   # Depositar
-POST /api/v1/clientes/:id/sacar       # Sacar
+
+```
+POST /api/v1/clientes/:id/depositar
+POST /api/v1/clientes/:id/sacar
 ```
 
-### Documentação Completa
-Acesse `http://localhost:3000/api/v1/docs` para ver a documentação interativa do Swagger.
+> **Docs completas**: `http://localhost:3000/api/v1/docs`
 
 ---
 
-## 🧪 Testes
+## 🧪 Testes & Qualidade
 
-### Backend
+**Backend**
+
 ```bash
 cd back
-
-# Testes unitários
 npm run test
-
-# Testes com coverage
 npm run test:cov
-
-# Testes em watch mode
 npm run test:watch
 ```
 
-### Frontend
+**Frontend**
+
 ```bash
 cd front
-
-# Testes unitários
 npm run test
-
-# Testes end-to-end
+# e2e (se configurado)
 npm run e2e
 ```
 
+**Padrões**
+
+* ESLint + Prettier
+* Cobertura mínima recomendada: **≥ 80%**
+
 ---
 
-## 🚀 Deployment
+## 🚀 Deploy (resumo)
 
-### Backend
+**Backend**
+
 ```bash
 cd back
-
-# Build para produção
 npm run build
-
-# Executar migrações em produção
 npx prisma migrate deploy
-
-# Iniciar aplicação
 npm run start:prod
 ```
 
-### Frontend
+**Frontend**
+
 ```bash
 cd front
-
-# Build para produção
-npm run build
-
-# Arquivos estarão em dist/
+npm run build     # artefatos em dist/
 ```
 
-### Docker (Planejado)
+**Docker (exemplo backend)**
+
 ```dockerfile
-# Dockerfile exemplo para backend
 FROM node:18-alpine
 WORKDIR /app
 COPY package*.json ./
@@ -425,53 +339,43 @@ EXPOSE 3000
 CMD ["npm", "run", "start:prod"]
 ```
 
+> **Prod**: preferir Postgres (ex.: RDS/Aurora) e segredos via **Secrets Manager**. Em dev, **SQLite** é suficiente.
+
 ---
 
-## 📋 Roadmap
+## 🗺️ Roadmap
 
-### Próximas Funcionalidades
-- [ ] **Sistema de permissões** (roles/permissions)
-- [ ] **Relatórios avançados** com exportação
-- [ ] **Notificações em tempo real** (WebSocket)
-- [ ] **Integração com APIs bancárias**
-- [ ] **Multi-tenancy** para diferentes organizações
-- [ ] **Auditoria avançada** com timeline
-- [ ] **Dashboard customizável**
-- [ ] **Exportação de dados** (CSV, PDF)
-
-### Melhorias Técnicas
-- [ ] **Rate limiting** mais granular
-- [ ] **Caching** com Redis
-- [ ] **Background jobs** com Bull
-- [ ] **Containerização** completa
-- [ ] **CI/CD** pipeline
-- [ ] **Monitoring** avançado
-- [ ] **Load balancing**
-- [ ] **Database replication**
+* [ ] Ledger + idempotência persistida
+* [ ] Rate limiting granular (app + WAF)
+* [ ] Cache Redis (listas/consultas quentes)
+* [ ] Jobs assíncronos (SQS/Bull)
+* [ ] Observabilidade (métricas/tracing avançado)
+* [ ] CI/CD + Docker Compose/K8s
+* [ ] Relatórios exportáveis (CSV/PDF) e gráficos
 
 ---
 
 ## 🤝 Contribuição
 
-1. **Fork** o projeto
-2. Crie uma **branch** para sua feature (`git checkout -b feature/amazing-feature`)
-3. **Commit** suas mudanças (`git commit -m 'Add some amazing feature'`)
-4. **Push** para a branch (`git push origin feature/amazing-feature`)
+1. Faça **fork**
+2. Crie a **branch**: `git checkout -b feature/xyz`
+3. **Commit**: `git commit -m "feat: xyz"`
+4. **Push**: `git push origin feature/xyz`
 5. Abra um **Pull Request**
 
-### Padrões de Código
-- Use **ESLint** e **Prettier** para formatação
-- Siga os padrões de **commit conventional**
-- Mantenha **cobertura de testes** acima de 80%
-- **Documente** APIs e componentes importantes
+**Padrões**
+
+* ESLint/Prettier
+* Commits convencionais
+* Testes ≥ 80%
 
 ---
 
 ## 👨‍💻 Autor
 
 **Gabriel**
-- Email: gabrielevaristovcp@gmail.com
+[Email](mailto:gabrielevaristovcp@gmail.com)
 
 ---
 
-*Desenvolvido com ❤️ para gerenciamento eficiente de clientes*
+*Feito com ❤️ para demonstrar arquitetura limpa, segurança e consistência financeira.*
