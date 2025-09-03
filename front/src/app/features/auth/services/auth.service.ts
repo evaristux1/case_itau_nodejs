@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Observable, map, tap } from 'rxjs';
 import { environment } from '../../../../enviroments/enviroments';
 import { ApiResponse } from '../../../core/models/api-response.model';
-// import { StorageService } from '../../../core/services/storage.service';
+import { StorageService } from '../../../core/services/storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,15 +13,13 @@ import { ApiResponse } from '../../../core/models/api-response.model';
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
-  // private readonly storageService = inject(StorageService);
+  private readonly storageService = inject(StorageService);
 
   private readonly tokenKey = 'itau_token';
 
-  // Signals para estado reativo
   private readonly _isAuthenticated = signal<boolean>(false);
   private readonly _currentUser = signal<any>(null);
 
-  // Readonly signals para componentes
   readonly isAuthenticated = this._isAuthenticated.asReadonly();
   readonly currentUser = this._currentUser.asReadonly();
 
@@ -38,7 +36,7 @@ export class AuthService {
       .pipe(
         map((response) => response.data),
         tap((result) => {
-          // this.storageService.setItem(this.tokenKey, result.access_token);
+          this.storageService.setItem(this.tokenKey, result.access_token);
           this._isAuthenticated.set(true);
           this._currentUser.set({ email });
         })
@@ -46,7 +44,7 @@ export class AuthService {
   }
 
   logout(): void {
-    // this.storageService.removeItem(this.tokenKey);
+    this.storageService.removeItem(this.tokenKey);
     this._isAuthenticated.set(false);
     this._currentUser.set(null);
     this.router.navigate(['/auth/login']);

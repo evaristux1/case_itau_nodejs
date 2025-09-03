@@ -1,24 +1,22 @@
-// core/interceptors/error.interceptor.ts
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../../features/auth/services/auth.service';
+import { NotificationService } from '../services/notification.service';
 
-export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+export const ErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
-  // const notificationService = inject(NotificationService);
+  const notificationService = inject(NotificationService);
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      // Token expirado ou não autorizado
       if (error.status === 401) {
         authService.logout();
         return throwError(() => error);
       }
 
-      // Extrai mensagem de erro da API
       const errorMessage = extractErrorMessage(error);
-      // notificationService.showError(errorMessage);
+      notificationService.showError(errorMessage);
 
       return throwError(() => error);
     })

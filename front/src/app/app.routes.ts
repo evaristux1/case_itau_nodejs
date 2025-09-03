@@ -19,9 +19,9 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     loadComponent: () =>
-      import(
-        './features/dashboard/components/dashboard/dashboard.component'
-      ).then((m) => m.DashboardComponent),
+      import('./features/dashboard/components/dashboard.component').then(
+        (m) => m.DashboardComponent
+      ),
     canActivate: [authGuard],
     title: 'Dashboard - Itaú Customer',
   },
@@ -44,6 +44,14 @@ export const routes: Routes = [
             './features/customers/components/customer-form/customer-form.component'
           ).then((m) => m.CustomerFormComponent),
         title: 'Novo Cliente - Itaú Customer',
+      },
+      {
+        path: ':id/edit',
+        loadComponent: () =>
+          import(
+            './features/customers/components/customer-form/customer-form.component'
+          ).then((m) => m.CustomerFormComponent),
+        title: 'Editar Cliente - Itaú Customer',
       },
       {
         path: ':id',
