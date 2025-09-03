@@ -3,6 +3,7 @@ import {
     Injectable,
     NotFoundException,
 } from '@nestjs/common';
+import { LedgerEntryType } from '../../domain/ledger.types';
 import { UnitOfWork } from '../../domain/ports/unit-of-work.port';
 import { Money, parseMoneyToCents } from '../../domain/value-objects/money.vo';
 
@@ -39,7 +40,7 @@ export class WithdrawUseCase {
             await ledger.createEntry({
                 customerId: input.customerId,
                 deltaCents: -cents,
-                type: 'WITHDRAW',
+                type: LedgerEntryType.WITHDRAW,
                 idempotencyKey: input.idempotencyKey ?? null,
             });
 
@@ -53,7 +54,11 @@ export class WithdrawUseCase {
                     'Concurrent modification, please retry',
                 );
 
-            return updated;
+            return {
+                id: updated.id,
+                balanceCents: updated.balanceCents,
+                version: updated.version,
+            };
         });
     }
 }

@@ -1,29 +1,14 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { IsNumber, IsPositive, IsString, ValidateIf } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString, Matches } from 'class-validator';
 
 export class MoneyAmountDto {
-    @ApiPropertyOptional({
-        description: 'Valor numérico em unidades (ex.: 150.75)',
-        example: 150.75,
-    })
-    @ValidateIf((o) => o.amountStr === undefined)
-    @Transform(({ value }) =>
-        typeof value === 'string' ? Number(value) : value,
-    )
-    @IsNumber({ maxDecimalPlaces: 2 })
-    @IsPositive()
-    amount?: number;
-
-    @ApiPropertyOptional({
-        description:
-            'Valor em string (ex.: "150.75"). Usado se `amount` não for enviado.',
+    @ApiProperty({
         example: '150.75',
+        description: 'Valor monetário com até 2 casas.',
     })
-    @ValidateIf((o) => o.amount === undefined)
     @IsString()
-    @Transform(({ value }) =>
-        typeof value === 'string' ? value.trim() : value,
-    )
-    amountStr?: string;
+    @Matches(/^\d+(\.\d{1,2})?$/, {
+        message: 'amount deve ter no máx. 2 casas decimais',
+    })
+    amount!: string;
 }

@@ -30,6 +30,8 @@ import { ListCustomersUseCase } from '../../application/use-cases/list-customers
 import { UpdateCustomerUseCase } from '../../application/use-cases/update-customer.uc';
 import { WithdrawUseCase } from '../../application/use-cases/withdraw.uc';
 
+import { Public } from '@app/decorators/public.decorator';
+import { ParseMoneyToCentsPipe } from '@app/pipes/parse-money-to-cents.pipe';
 import { CreateCustomerDto } from '../../application/dto/create-customer.dto';
 import { MoneyAmountDto } from '../../application/dto/money-amount.dto';
 import { UpdateCustomerDto } from '../../application/dto/update-customer.dto';
@@ -95,7 +97,7 @@ export class CustomersController {
     get(@Param('id', ParseIntPipe) id: number) {
         return this.getCustomer.execute(id);
     }
-
+    @Public()
     @Post()
     @ApiOperation({ summary: 'Criar novo cliente' })
     @ApiBody({ type: CreateCustomerDto })
@@ -198,13 +200,12 @@ export class CustomersController {
     @ApiNotFoundResponse({ description: 'Customer not found' })
     depositar(
         @Param('id', ParseIntPipe) id: number,
-        @Body() dto: MoneyAmountDto,
+        @Body(ParseMoneyToCentsPipe) body: { amountCents: number },
         @Headers('Idempotency-Key') idem?: string,
     ) {
-        const amount = dto.amount ?? dto.amountStr!;
         return this.deposit.execute({
             customerId: id,
-            amount,
+            amount: body.amountCents,
             idempotencyKey: idem,
         });
     }
@@ -247,13 +248,12 @@ export class CustomersController {
     @ApiNotFoundResponse({ description: 'Customer not found' })
     sacar(
         @Param('id', ParseIntPipe) id: number,
-        @Body() dto: MoneyAmountDto,
+        @Body(ParseMoneyToCentsPipe) body: { amountCents: number },
         @Headers('Idempotency-Key') idem?: string,
     ) {
-        const amount = dto.amount ?? dto.amountStr!;
         return this.withdraw.execute({
             customerId: id,
-            amount,
+            amount: body.amountCents,
             idempotencyKey: idem,
         });
     }

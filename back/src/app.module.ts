@@ -7,13 +7,16 @@ import {
     ThrottlerModuleOptions,
 } from '@nestjs/throttler';
 import { ConfigurationModule } from './config/configuration.module';
+import { GlobalAuthGuard } from './guards/global-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CustomersModule } from './modules/customers/customers.module';
-import { HealthModule } from './modules/health/health.module';
 import { AllExceptionsFilter } from './shared/infrastructure/filters/all-exceptions.filter';
 import { LoggingInterceptor } from './shared/infrastructure/interceptors/logging.interceptor';
 import { TransformInterceptor } from './shared/infrastructure/interceptors/transform.interceptor';
 import { PrismaModule } from './shared/infrastructure/prisma/prisma.module';
+import { JwtStrategy } from './shared/security/jwt.strategy';
 import { SharedModule } from './shared/shared.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
     imports: [
@@ -34,8 +37,8 @@ import { SharedModule } from './shared/shared.module';
         }),
         SharedModule,
         CustomersModule,
-        HealthModule,
         PrismaModule,
+        AuthModule,
     ],
     providers: [
         {
@@ -47,6 +50,9 @@ import { SharedModule } from './shared/shared.module';
                 transformOptions: { enableImplicitConversion: true },
             }),
         },
+        JwtStrategy,
+        JwtAuthGuard,
+        { provide: APP_GUARD, useClass: GlobalAuthGuard },
         { provide: APP_GUARD, useClass: ThrottlerGuard },
         { provide: APP_FILTER, useClass: AllExceptionsFilter },
         { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },

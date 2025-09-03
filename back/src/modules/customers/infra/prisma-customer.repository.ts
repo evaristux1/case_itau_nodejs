@@ -71,7 +71,6 @@ export class PrismaCustomerRepository {
         try {
             const row = await this.prisma.customer.update({
                 where: {
-                    // Prisma usa o NOME DO SELETOR gerado = campos concatenados:
                     id_version: {
                         id: params.id,
                         version: params.currentVersion,
@@ -84,7 +83,6 @@ export class PrismaCustomerRepository {
             });
             return mapCustomer(row);
         } catch {
-            // Se não achou (versão mudou), Prisma lança erro → retorna null
             return null;
         }
     }

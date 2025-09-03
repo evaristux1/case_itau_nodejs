@@ -1,4 +1,4 @@
-export type LedgerType = 'DEPOSIT' | 'WITHDRAW';
+import { LedgerEntryType } from '../ledger.types';
 
 export abstract class LedgerRepository {
     abstract findByIdempotencyKey(key: string): Promise<{ id: string } | null>;
@@ -6,7 +6,7 @@ export abstract class LedgerRepository {
     abstract createEntry(params: {
         customerId: number;
         deltaCents: number;
-        type: LedgerType;
+        type: LedgerEntryType;
         idempotencyKey?: string | null;
     }): Promise<{ id: string }>;
 }

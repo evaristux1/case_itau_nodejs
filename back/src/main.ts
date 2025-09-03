@@ -10,7 +10,6 @@ import 'module-alias/register';
 async function bootstrap() {
     const logger = new Logger('Bootstrap');
 
-    // Error handlers
     process.on('uncaughtException', (err) => {
         logger.error('FATAL uncaughtException:', err);
         process.exit(1);
@@ -28,7 +27,6 @@ async function bootstrap() {
 
     const configService = app.get(ConfigService);
 
-    // Configuration
     const nodeEnv = configService.get<string>('NODE_ENV', 'development');
     const apiPrefix = 'api/v1';
     const apiVersion = configService.get<string>('API_VERSION', '1.0.0');

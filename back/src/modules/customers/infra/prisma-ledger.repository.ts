@@ -1,10 +1,8 @@
 // src/modules/customers/infra/prisma-ledger.repository.ts
 import { PrismaService } from '@app/shared/infrastructure/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
-import {
-    LedgerRepository,
-    LedgerType,
-} from '../domain/ports/ledger.repository';
+import { LedgerEntryType } from '../domain/ledger.types';
+import { LedgerRepository } from '../domain/ports/ledger.repository';
 
 @Injectable()
 export class PrismaLedgerRepository implements LedgerRepository {
@@ -19,7 +17,7 @@ export class PrismaLedgerRepository implements LedgerRepository {
     async createEntry(params: {
         customerId: number;
         deltaCents: number;
-        type: LedgerType; // se não usar enum no schema, mantenha string
+        type: LedgerEntryType; // se não usar enum no schema, mantenha string
         idempotencyKey?: string | null;
         balanceBeforeCents?: number | null;
         balanceAfterCents?: number | null;

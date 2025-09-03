@@ -3,6 +3,7 @@ import {
     Injectable,
     NotFoundException,
 } from '@nestjs/common';
+import { LedgerEntryType } from '../../domain/ledger.types';
 import { UnitOfWork } from '../../domain/ports/unit-of-work.port';
 import { Money, parseMoneyToCents } from '../../domain/value-objects/money.vo';
 
@@ -37,7 +38,7 @@ export class DepositUseCase {
             await ledger.createEntry({
                 customerId: input.customerId,
                 deltaCents: cents,
-                type: 'DEPOSIT',
+                type: LedgerEntryType.DEPOSIT,
                 idempotencyKey: input.idempotencyKey ?? null,
             });
 
@@ -51,7 +52,11 @@ export class DepositUseCase {
                     'Concurrent modification, please retry',
                 );
 
-            return updated;
+            return {
+                id: updated.id,
+                balanceCents: updated.balanceCents,
+                version: updated.version,
+            };
         });
     }
 }
