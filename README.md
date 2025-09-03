@@ -49,7 +49,7 @@ O **Itaú Customer Management System** é uma aplicação full-stack que permite
                                    └─────────────┘
 ```
 
-### Backend Architecture (Hexagonal/Clean Architecture)
+### Backend Architecture (Clean Architecture)
 ```
 ┌─────────────────────────────────────────────────────┐
 │                   Presentation Layer                │
@@ -467,26 +467,10 @@ CMD ["npm", "run", "start:prod"]
 
 ---
 
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
-
----
-
 ## 👨‍💻 Autor
 
 **Gabriel**
-- LinkedIn: [Seu LinkedIn]
-- Email: [seu-email@exemplo.com]
-
----
-
-## 🙏 Agradecimentos
-
-- **NestJS Team** pela excelente framework
-- **Angular Team** pelo Angular 18 e Signals
-- **Material Design** pela biblioteca de componentes
-- **Prisma Team** pelo ORM fantástico
+- Email: gabrielevaristovcp@gmail.com
 
 ---
 
