@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { LedgerEntryType } from '../../domain/ledger.types';
 import { UnitOfWork } from '../../domain/ports/unit-of-work.port';
-import { parseMoneyToCents } from '../../domain/value-objects/money.vo';
+import { Money } from '../../domain/value-objects/money.vo';
 
 @Injectable()
 export class DepositUseCase {
@@ -16,7 +16,7 @@ export class DepositUseCase {
         amount: number | string;
         idempotencyKey?: string;
     }) {
-        const cents = parseMoneyToCents(input.amount);
+        const cents = Money.from(input.amount).value();
         if (cents <= 0)
             throw new BadRequestException('Amount must be positive');
         return this.uow.withTransaction(async ({ customers, ledger }) => {
