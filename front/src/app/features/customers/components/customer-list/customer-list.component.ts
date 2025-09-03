@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -9,11 +10,15 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { catchError, finalize, of } from 'rxjs';
+import { BrlFromCentsPipe } from '../../../../shared/pipes/brl-from-cents.pipe';
 import { CpfFormatPipe } from '../../../../shared/pipes/cpf-format.pipe';
-import { CurrencyFormatPipe } from '../../../../shared/pipes/currency-format.pipe';
 import { Customer } from '../../models/customer.model';
 import { CustomersService } from '../../services/customers.service';
 import { ConfirmDeleteDialogComponent } from '../confirm-dialog-delete/confirm-dialog-delete.component';
+import {
+  TransactionDialogComponent,
+  TransactionType,
+} from '../transcation-dialog/trasaction-dialog.component';
 
 @Component({
   selector: 'app-customer-list',
@@ -28,8 +33,8 @@ import { ConfirmDeleteDialogComponent } from '../confirm-dialog-delete/confirm-d
     MatProgressSpinnerModule,
     MatDialogModule,
     MatSnackBarModule,
-    CurrencyFormatPipe,
     CpfFormatPipe,
+    BrlFromCentsPipe,
   ],
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],
@@ -43,12 +48,94 @@ export class CustomerListComponent implements OnInit {
   readonly isLoading = signal<boolean>(false);
   readonly isDeletingCustomer = signal<number | null>(null);
 
+  readonly processingDepositId = signal<number | null>(null);
+  readonly processingWithdrawId = signal<number | null>(null);
   readonly inactiveCustomersCount = computed(
     () => this.customers().filter((customer) => customer.deletedAt).length
   );
 
   ngOnInit(): void {
     this.loadCustomers();
+  }
+  private uuid(): string {
+    if ('crypto' in window && (window as any).crypto?.randomUUID) {
+      return (window as any).crypto.randomUUID();
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = (Math.random() * 16) | 0,
+        v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  }
+  openTransactionDialog(customer: Customer, type: TransactionType): void {
+    const dialogRef = this.dialog.open(TransactionDialogComponent, {
+      width: '420px',
+      disableClose: true,
+      data: { customerName: customer.name, type },
+    });
+
+    dialogRef.afterClosed().subscribe((result?: { amount: string }) => {
+      if (!result?.amount) return;
+
+      const idempotencyKey = this.uuid();
+      if (type === 'deposit') {
+        this.doDeposit(customer.id, result.amount, idempotencyKey);
+      } else {
+        this.doWithdraw(customer.id, result.amount, idempotencyKey);
+      }
+    });
+  }
+
+  private doDeposit(customerId: number, amount: string, key: string): void {
+    this.processingDepositId.set(customerId);
+
+    this.customersService
+      .deposit(customerId, amount, key)
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+          console.error('Erro ao depositar:', err);
+          const msg =
+            err?.error?.message || 'Erro ao depositar. Tente novamente.';
+          this.showErrorMessage(msg);
+          return of(null);
+        }),
+        finalize(() => this.processingDepositId.set(null))
+      )
+      .subscribe((res) => {
+        if (!res) return;
+        this.showSuccessMessage('Depósito realizado com sucesso!');
+        this.loadCustomers();
+      });
+  }
+
+  private doWithdraw(customerId: number, amount: string, key: string): void {
+    this.processingWithdrawId.set(customerId);
+
+    this.customersService
+      .withdraw(customerId, amount, key)
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+          console.error('Erro ao sacar:', err);
+          const msg = err?.error?.message || 'Erro ao sacar. Tente novamente.';
+          this.showErrorMessage(msg);
+          return of(null);
+        }),
+        finalize(() => this.processingWithdrawId.set(null))
+      )
+      .subscribe((res) => {
+        if (!res) return;
+        this.showSuccessMessage('Saque realizado com sucesso!');
+        // Mesmo comentário do depósito
+        this.loadCustomers();
+      });
+  }
+
+  // Caso você queira atualizar localmente sem recarregar:
+  private updateCustomerBalance(customerId: number, newBalanceCents: number) {
+    const updated = this.customers().map((c) =>
+      c.id === customerId ? { ...c, balanceCents: newBalanceCents } : c
+    );
+    this.customers.set(updated);
   }
 
   private loadCustomers(): void {
@@ -111,9 +198,6 @@ export class CustomerListComponent implements OnInit {
       });
   }
 
-  /**
-   * Formata uma data para exibição no formato brasileiro
-   */
   formatDate(dateString: string): string {
     try {
       const date = new Date(dateString);

@@ -15,7 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { AuthService } from '../../services/auth.service';
 import { CreateAccountModalComponent } from '../create-account-modal/create-account-modal.comopent';
@@ -44,7 +44,7 @@ export class LoginComponent {
   private readonly router = inject(Router);
   private readonly notificationService = inject(NotificationService);
   private readonly dialog = inject(MatDialog);
-
+  private readonly route = inject(ActivatedRoute);
   readonly isLoading = signal(false);
 
   loginForm: FormGroup = this.fb.group({
@@ -62,7 +62,9 @@ export class LoginComponent {
       this.authService.login(this.loginForm.value.email).subscribe({
         next: () => {
           this.notificationService.showSuccess('Login realizado com sucesso!');
-          this.router.navigate(['/dashboard']);
+          const returnUrl =
+            this.route.snapshot.queryParamMap.get('returnUrl') ?? '/dashboard';
+          this.router.navigateByUrl(returnUrl);
         },
         error: () => {
           this.isLoading.set(false);

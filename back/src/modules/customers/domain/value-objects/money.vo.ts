@@ -18,7 +18,7 @@ export class Money {
 
 export function parseMoneyToCents(input: number | string): number {
     if (typeof input === 'number') {
-        return Math.round(Number(input.toFixed(2)) * 100);
+        return Math.round(Number(input.toFixed(2)));
     }
     const s = String(input).trim().replace(',', '.');
     if (!/^-?\d+(\.\d{0,2})?$/.test(s)) {
@@ -27,7 +27,7 @@ export function parseMoneyToCents(input: number | string): number {
     const [intPart, decPart = ''] = s.split('.');
     const padded = (decPart + '00').slice(0, 2);
     const cents =
-        parseInt(intPart, 10) * 100 +
+        parseInt(intPart, 10) +
         parseInt(padded || '0', 10) * (intPart.startsWith('-') ? -1 : 1);
     return cents;
 }

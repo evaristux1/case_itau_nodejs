@@ -76,4 +76,7 @@ export class AuthService {
       return true;
     }
   }
+  verifyIsAuthenticated(): boolean {
+    return this.isAuthenticated();
+  }
 }

@@ -269,6 +269,16 @@
     margin-right: 0.25rem;
   }
 
+ &.deposit-button:hover {
+    background-color: var(--mat-sys-primary-container);
+    color: var(--mat-sys-on-primary-container);
+  }
+
+  &.withdraw-button:hover {
+    background-color: var(--mat-sys-secondary-container, var(--mat-sys-tertiary-container));
+    color: var(--mat-sys-on-secondary-container, var(--mat-sys-on-tertiary-container));
+  }
+
   &.view-button:hover {
     background-color: var(--mat-sys-primary-container);
     color: var(--mat-sys-on-primary-container);

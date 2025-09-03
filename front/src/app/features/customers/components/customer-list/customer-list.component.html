@@ -74,7 +74,7 @@
               [class.positive]="customer.balanceCents > 0 && customer.deletedAt"
               [class.zero]="customer.balanceCents === 0 && customer.deletedAt"
             >
-              {{ customer.balanceCents | currencyFormat }}
+              {{ customer.balanceCents | brlFromCents }}
             </span>
           </div>
 
@@ -98,14 +98,47 @@
 
       <mat-card-actions align="end" class="card-actions">
         @if(!!!customer.deletedAt) {
+
+        <!-- Depositar -->
         <button
           mat-button
-          [routerLink]="['/customers', customer.id]"
-          class="action-button view-button"
+          class="action-button deposit-button"
+          (click)="openTransactionDialog(customer, 'deposit')"
+          [disabled]="
+            processingDepositId() === customer.id ||
+            processingWithdrawId() === customer.id
+          "
         >
-          <mat-icon>visibility</mat-icon>
-          Ver Detalhes
+          @if(processingDepositId() === customer.id) {
+          <mat-progress-spinner
+            diameter="16"
+            mode="indeterminate"
+          ></mat-progress-spinner>
+          } @else {
+          <mat-icon>arrow_downward</mat-icon>
+          } Depositar
         </button>
+
+        <!-- Sacar -->
+        <button
+          mat-button
+          class="action-button withdraw-button"
+          (click)="openTransactionDialog(customer, 'withdraw')"
+          [disabled]="
+            processingDepositId() === customer.id ||
+            processingWithdrawId() === customer.id
+          "
+        >
+          @if(processingWithdrawId() === customer.id) {
+          <mat-progress-spinner
+            diameter="16"
+            mode="indeterminate"
+          ></mat-progress-spinner>
+          } @else {
+          <mat-icon>arrow_upward</mat-icon>
+          } Sacar
+        </button>
+
         <button
           mat-button
           [routerLink]="['/customers', customer.id, 'edit']"
