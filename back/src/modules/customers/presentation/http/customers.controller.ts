@@ -35,6 +35,7 @@ import { ParseMoneyToCentsPipe } from '@app/pipes/parse-money-to-cents.pipe';
 import { CreateCustomerDto } from '../../application/dto/create-customer.dto';
 import { MoneyAmountDto } from '../../application/dto/money-amount.dto';
 import { UpdateCustomerDto } from '../../application/dto/update-customer.dto';
+import { DeleteCustomerUseCase } from '../../application/use-cases/delete-customer.uc';
 
 @ApiTags('Clientes')
 @ApiBearerAuth()
@@ -44,6 +45,7 @@ export class CustomersController {
     constructor(
         private readonly createCustomer: CreateCustomerUseCase,
         private readonly updateCustomer: UpdateCustomerUseCase,
+        private readonly deleteCustomer: DeleteCustomerUseCase,
         private readonly getCustomer: GetCustomerUseCase,
         private readonly listCustomers: ListCustomersUseCase,
         private readonly deposit: DepositUseCase,
@@ -140,7 +142,7 @@ export class CustomersController {
             },
         },
     })
-    @ApiNotFoundResponse({ description: 'Customer not found' })
+    @ApiNotFoundResponse({ description: 'Cliente não encontrado' })
     @ApiBadRequestResponse({ description: 'Payload inválido' })
     update(
         @Param('id', ParseIntPipe) id: number,
@@ -160,7 +162,7 @@ export class CustomersController {
         },
     })
     async remove(@Param('id', ParseIntPipe) id: number) {
-        return { ok: true };
+        return this.deleteCustomer.execute(id);
     }
 
     @Post(':id/depositar')

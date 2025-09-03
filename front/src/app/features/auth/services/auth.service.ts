@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, map, tap } from 'rxjs';
-import { environment } from '../../../../enviroments/enviroments';
+import { environment } from '../../../../environments/environments';
 import { ApiResponse } from '../../../core/models/api-response.model';
 import { StorageService } from '../../../core/services/storage.service';
 

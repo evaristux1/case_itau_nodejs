@@ -8,5 +8,6 @@ export class Customer {
         public version: number,
         public readonly createdAt: Date,
         public readonly updatedAt: Date,
+        public readonly deletedAt?: Date | undefined | null,
     ) {}
 }

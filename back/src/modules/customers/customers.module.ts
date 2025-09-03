@@ -15,6 +15,7 @@ import { PrismaCustomerRepository } from './infra/prisma-customer.repository';
 import { PrismaLedgerRepository } from './infra/prisma-ledger.repository';
 import { PrismaUnitOfWork } from './infra/prisma-unit-of-work';
 
+import { DeleteCustomerUseCase } from './application/use-cases/delete-customer.uc';
 import { CustomerRepository } from './domain/ports/customer.repository';
 import { LedgerRepository } from './domain/ports/ledger.repository';
 import { UnitOfWork } from './domain/ports/unit-of-work.port';
@@ -29,6 +30,7 @@ import { UnitOfWork } from './domain/ports/unit-of-work.port';
         ListCustomersUseCase,
         DepositUseCase,
         WithdrawUseCase,
+        DeleteCustomerUseCase,
         PrismaCustomerRepository,
         PrismaLedgerRepository,
         PrismaUnitOfWork,

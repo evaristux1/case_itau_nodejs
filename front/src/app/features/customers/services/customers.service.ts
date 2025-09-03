@@ -2,7 +2,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { environment } from '../../../../enviroments/enviroments';
+import { environment } from '../../../../environments/environments';
 import { ApiResponse } from '../../../core/models/api-response.model';
 import {
   CreateCustomerDto,
@@ -42,6 +42,12 @@ export class CustomersService {
   ): Observable<Customer> {
     return this.http
       .put<ApiResponse<Customer>>(`${this.baseUrl}/${id}`, customer)
+      .pipe(map((response) => response.data));
+  }
+
+  deleteCustomer(id: number): Observable<Customer> {
+    return this.http
+      .delete<ApiResponse<Customer>>(`${this.baseUrl}/${id}`)
       .pipe(map((response) => response.data));
   }
 

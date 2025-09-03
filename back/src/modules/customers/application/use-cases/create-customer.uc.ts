@@ -1,4 +1,3 @@
-// src/modules/customers/application/use-cases/create-customer.uc.ts
 import { PasswordHasherService } from '@app/shared/security/password-hasher.service';
 import { DocumentService } from '@app/shared/validations/document.validation';
 import { BadRequestException, Injectable } from '@nestjs/common';
@@ -26,6 +25,15 @@ export class CreateCustomerUseCase {
         const passwordHash = await this.hasher.hash(input.password);
 
         return this.uow.withTransaction(async ({ customers }) => {
+            const existingEmail = await customers.findByEmail(email);
+            const existingDocument = await customers.findByDocument(document);
+            if (existingEmail && !existingEmail.deletedAt) {
+                throw new BadRequestException('E-mail already registered');
+            }
+            if (existingDocument) {
+                throw new BadRequestException('This document is not allowed');
+            }
+
             return customers.create({ name, email, document, passwordHash });
         });
     }

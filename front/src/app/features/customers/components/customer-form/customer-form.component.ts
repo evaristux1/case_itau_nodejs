@@ -119,7 +119,8 @@ export class CustomerFormComponent implements OnInit {
           );
           this.router.navigate(['/customers']);
         },
-        error: () => {
+        error: (err) => {
+          console.log(err);
           this.isLoading.set(false);
         },
       });
@@ -148,7 +149,6 @@ export class CustomerFormComponent implements OnInit {
     if (!cpf || cpf.length !== 11) {
       return { invalidCpf: true };
     }
-    // Aqui você pode adicionar validação de CPF mais robusta
     return null;
   }
 

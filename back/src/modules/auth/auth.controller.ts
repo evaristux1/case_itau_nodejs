@@ -1,11 +1,10 @@
-// src/modules/auth/presentation/http/auth.controller.ts
 import { Public } from '@app/decorators/public.decorator';
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 
-@ApiTags('Autenticação *')
+@ApiTags('Autenticação')
 @Controller('auth')
 export class AuthController {
     constructor(private readonly auth: AuthService) {}

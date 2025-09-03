@@ -1,6 +1,12 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsEmail, IsOptional, IsString, MaxLength } from 'class-validator';
+import {
+    IsEmail,
+    IsOptional,
+    IsString,
+    Length,
+    MaxLength,
+} from 'class-validator';
 
 export class UpdateCustomerDto {
     @ApiPropertyOptional({
@@ -26,4 +32,12 @@ export class UpdateCustomerDto {
         typeof value === 'string' ? value.trim() : value,
     )
     email?: string;
+
+    @IsString()
+    @IsOptional()
+    @Length(11, 11)
+    @Transform(({ value }) =>
+        typeof value === 'string' ? value.replace(/\D/g, '') : value,
+    )
+    document?: string;
 }

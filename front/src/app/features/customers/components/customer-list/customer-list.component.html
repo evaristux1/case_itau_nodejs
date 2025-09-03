@@ -1,0 +1,166 @@
+<div class="customer-list">
+  <div class="header">
+    <h1>
+      <mat-icon>people</mat-icon>
+      Clientes
+    </h1>
+    <div class="header-info">
+      <mat-chip class="customer-count">
+        {{ customers().length }} cliente{{
+          customers().length !== 1 ? "s" : ""
+        }}
+      </mat-chip>
+      <mat-chip class="inactive-count" *ngIf="inactiveCustomersCount() > 0">
+        {{ inactiveCustomersCount() }} inativo{{
+          inactiveCustomersCount() !== 1 ? "s" : ""
+        }}
+      </mat-chip>
+    </div>
+  </div>
+
+  @if(isLoading()) {
+  <div class="loading-container">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    <p>Carregando clientes...</p>
+  </div>
+  } @else { @if(customers().length > 0) {
+  <div class="customers-grid">
+    <mat-card
+      *ngFor="let customer of customers()"
+      class="customer-card"
+      [class.inactive]="!!customer.deletedAt"
+    >
+      <mat-card-header>
+        <div
+          mat-card-avatar
+          class="customer-avatar"
+          [class.inactive]="!!customer.deletedAt"
+        >
+          <mat-icon>{{
+            !!customer.deletedAt ? "person_off" : "person"
+          }}</mat-icon>
+        </div>
+        <mat-card-title [class.inactive]="!!customer.deletedAt">
+          {{ customer.name }}
+          <mat-chip *ngIf="!!customer.deletedAt" class="status-chip inactive">
+            Inativo
+          </mat-chip>
+        </mat-card-title>
+        <mat-card-subtitle>Cliente #{{ customer.id }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="customer-details">
+          <div class="detail-row">
+            <mat-icon class="detail-icon">email</mat-icon>
+            <span class="detail-text">{{ customer.email }}</span>
+          </div>
+
+          <div class="detail-row">
+            <mat-icon class="detail-icon">badge</mat-icon>
+            <span class="detail-text">{{ customer.document | cpfFormat }}</span>
+          </div>
+
+          <div class="detail-row">
+            <mat-icon
+              class="detail-icon"
+              [class.positive]="customer.balanceCents > 0 && customer.deletedAt"
+              [class.zero]="customer.balanceCents === 0 && customer.deletedAt"
+            >
+              account_balance_wallet
+            </mat-icon>
+            <span
+              class="balance detail-text"
+              [class.positive]="customer.balanceCents > 0 && customer.deletedAt"
+              [class.zero]="customer.balanceCents === 0 && customer.deletedAt"
+            >
+              {{ customer.balanceCents | currencyFormat }}
+            </span>
+          </div>
+
+          <div class="detail-row">
+            <mat-icon class="detail-icon">schedule</mat-icon>
+            <span class="created-date detail-text">
+              Criado em {{ formatDate(customer.createdAt) }}
+            </span>
+          </div>
+
+          @if(!!customer.deletedAt && customer.deletedAt) {
+          <div class="detail-row">
+            <mat-icon class="detail-icon danger">delete</mat-icon>
+            <span class="deleted-date detail-text">
+              Excluído em {{ formatDate(customer.deletedAt) }}
+            </span>
+          </div>
+          }
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions align="end" class="card-actions">
+        @if(!!!customer.deletedAt) {
+        <button
+          mat-button
+          [routerLink]="['/customers', customer.id]"
+          class="action-button view-button"
+        >
+          <mat-icon>visibility</mat-icon>
+          Ver Detalhes
+        </button>
+        <button
+          mat-button
+          [routerLink]="['/customers', customer.id, 'edit']"
+          class="action-button edit-button"
+        >
+          <mat-icon>edit</mat-icon>
+          Editar
+        </button>
+        <button
+          mat-button
+          color="warn"
+          (click)="confirmDelete(customer)"
+          class="action-button delete-button"
+          [disabled]="isDeletingCustomer() === customer.id"
+        >
+          @if(isDeletingCustomer() === customer.id) {
+          <mat-progress-spinner
+            diameter="16"
+            mode="indeterminate"
+          ></mat-progress-spinner>
+          } @else {
+          <mat-icon>delete</mat-icon>
+          } Excluir
+        </button>
+        } @else {
+        <div class="inactive-actions">
+          <mat-icon class="inactive-icon">block</mat-icon>
+          <span class="inactive-text">Cliente inativo</span>
+        </div>
+        }
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  } @else {
+  <mat-card class="empty-state">
+    <mat-card-content>
+      <mat-icon class="empty-icon">people_outline</mat-icon>
+      <h2>Nenhum cliente encontrado</h2>
+      <p>Comece criando seu primeiro cliente</p>
+      <button mat-raised-button color="primary" routerLink="/customers/new">
+        <mat-icon>person_add</mat-icon>
+        Criar Cliente
+      </button>
+    </mat-card-content>
+  </mat-card>
+  }
+
+  <button
+    mat-fab
+    color="primary"
+    class="fab"
+    routerLink="/customers/new"
+    aria-label="Novo Cliente"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+  }
+</div>

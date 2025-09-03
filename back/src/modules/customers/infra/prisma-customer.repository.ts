@@ -15,6 +15,7 @@ function mapCustomer(row: PrismaCustomer): Customer {
         row.version,
         row.createdAt,
         row.updatedAt,
+        row.deletedAt,
     );
 }
 
@@ -41,14 +42,17 @@ export class PrismaCustomerRepository {
 
     async update(
         id: number,
-        data: { name?: string; email?: string },
+        data: { name?: string; email?: string; document?: string },
     ): Promise<Customer> {
         const row = await this.prisma.customer.update({ where: { id }, data });
         return mapCustomer(row);
     }
 
     async delete(id: number): Promise<void> {
-        await this.prisma.customer.delete({ where: { id } });
+        await this.prisma.customer.update({
+            where: { id },
+            data: { deletedAt: new Date(), status: 'INACTIVE' },
+        });
     }
 
     async findById(id: number): Promise<Customer | null> {
@@ -85,5 +89,17 @@ export class PrismaCustomerRepository {
         } catch {
             return null;
         }
+    }
+
+    async findByEmail(email: string): Promise<Customer | null> {
+        const row = await this.prisma.customer.findFirst({ where: { email } });
+        return row ? mapCustomer(row) : null;
+    }
+
+    async findByDocument(document: string): Promise<Customer | null> {
+        const row = await this.prisma.customer.findFirst({
+            where: { document },
+        });
+        return row ? mapCustomer(row) : null;
     }
 }

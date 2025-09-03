@@ -1,0 +1,177 @@
+<div class="dashboard-container">
+  <!-- Header de Boas-vindas -->
+  <div class="welcome-header">
+    <div class="welcome-content">
+      <div class="greeting">
+        <h1>{{ getCurrentTime() }}, {{ getUserName() }}! 👋</h1>
+        <p>Aqui está um resumo da sua plataforma hoje</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+  <div class="loading-state">
+    <div class="loading-cards">
+      @for (item of [1,2,3,4]; track item) {
+      <div class="skeleton-card">
+        <div class="skeleton-content">
+          <div class="skeleton-icon"></div>
+          <div class="skeleton-text">
+            <div class="skeleton-line skeleton-title"></div>
+            <div class="skeleton-line skeleton-subtitle"></div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- Stats Cards -->
+  @if (!isLoading()) {
+  <div class="stats-section">
+    <div class="stats-grid">
+      @for (stat of quickStats(); track stat.icon) {
+      <mat-card class="stat-card" [class]="'stat-card--' + stat.color">
+        <mat-card-content>
+          <div class="stat-header">
+            <div
+              class="stat-icon-container"
+              [class]="'stat-icon--' + stat.color"
+            >
+              <mat-icon class="stat-icon">{{ stat.icon }}</mat-icon>
+            </div>
+            <div class="stat-trend" [class]="'trend--positive'">
+              {{ stat.trend }}
+            </div>
+          </div>
+
+          <div class="stat-content">
+            <div class="stat-value">
+              @if (stat.icon === 'account_balance_wallet' || stat.icon ===
+              'trending_up') {
+              <span>{{ stat.value | currencyFormat }}</span>
+              } @else {
+              <span>{{ stat.value }}</span>
+              }
+            </div>
+            <div class="stat-details">
+              <h3>{{ stat.title }}</h3>
+              <p>{{ stat.subtitle }}</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- Quick Actions Section -->
+  @if (!isLoading()) {
+  <div class="actions-section">
+    <div class="section-header">
+      <h2>
+        <mat-icon>flash_on</mat-icon>
+        Ações Rápidas
+      </h2>
+      <p>Acesse as funcionalidades mais utilizadas</p>
+    </div>
+
+    <div class="actions-grid">
+      <mat-card class="action-card" routerLink="/customers" matRipple>
+        <mat-card-content>
+          <div class="action-icon-container action-icon--view">
+            <mat-icon>people</mat-icon>
+          </div>
+          <div class="action-content">
+            <h3>Ver Clientes</h3>
+            <p>Visualize e gerencie todos os clientes cadastrados</p>
+          </div>
+          <div class="action-arrow">
+            <mat-icon>arrow_forward</mat-icon>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="action-card" routerLink="/customers/new" matRipple>
+        <mat-card-content>
+          <div class="action-icon-container action-icon--add">
+            <mat-icon>person_add</mat-icon>
+          </div>
+          <div class="action-content">
+            <h3>Novo Cliente</h3>
+            <p>Cadastre um novo cliente rapidamente</p>
+          </div>
+          <div class="action-arrow">
+            <mat-icon>arrow_forward</mat-icon>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="action-card action-card--feature" matRipple>
+        <mat-card-content>
+          <div class="action-icon-container action-icon--report">
+            <mat-icon>analytics</mat-icon>
+          </div>
+          <div class="action-content">
+            <h3>Relatórios</h3>
+            <p>Análises detalhadas e insights dos seus dados</p>
+            <div class="feature-badge">Em breve</div>
+          </div>
+          <div class="action-arrow">
+            <mat-icon>arrow_forward</mat-icon>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="action-card action-card--feature" matRipple>
+        <mat-card-content>
+          <div class="action-icon-container action-icon--settings">
+            <mat-icon>settings</mat-icon>
+          </div>
+          <div class="action-content">
+            <h3>Configurações</h3>
+            <p>Personalize sua experiência na plataforma</p>
+            <div class="feature-badge">Em breve</div>
+          </div>
+          <div class="action-arrow">
+            <mat-icon>arrow_forward</mat-icon>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  }
+
+  <!-- Quick Summary -->
+  @if (!isLoading() && totalCustomers() > 0) {
+  <div class="summary-section">
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="summary-header">
+          <mat-icon>insights</mat-icon>
+          <h3>Resumo Geral</h3>
+        </div>
+        <div class="summary-content">
+          <div class="summary-item">
+            <span class="summary-label">Taxa de clientes ativos:</span>
+            <span class="summary-value">
+              {{ ((activeCustomers() / totalCustomers()) * 100).toFixed(1) }}%
+            </span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Crescimento mensal:</span>
+            <span class="summary-value positive">+12.5%</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Última atualização:</span>
+            <span class="summary-value"> </span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  }
+</div>

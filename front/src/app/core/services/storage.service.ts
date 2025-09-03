@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class StorageService {
-  private isLocalStorageAvailable(): boolean {
+  private isStorageAvailable(): boolean {
     try {
       return typeof Storage !== 'undefined' && localStorage !== null;
     } catch {
@@ -13,27 +13,27 @@ export class StorageService {
   }
 
   setItem(key: string, value: string): void {
-    if (this.isLocalStorageAvailable()) {
-      localStorage.setItem(key, value);
+    if (this.isStorageAvailable()) {
+      sessionStorage.setItem(key, value);
     }
   }
 
   getItem(key: string): string | null {
-    if (this.isLocalStorageAvailable()) {
-      return localStorage.getItem(key);
+    if (this.isStorageAvailable()) {
+      return sessionStorage.getItem(key);
     }
     return null;
   }
 
   removeItem(key: string): void {
-    if (this.isLocalStorageAvailable()) {
-      localStorage.removeItem(key);
+    if (this.isStorageAvailable()) {
+      sessionStorage.removeItem(key);
     }
   }
 
   clear(): void {
-    if (this.isLocalStorageAvailable()) {
-      localStorage.clear();
+    if (this.isStorageAvailable()) {
+      sessionStorage.clear();
     }
   }
 }

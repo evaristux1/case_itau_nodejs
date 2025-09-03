@@ -1,0 +1,86 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header class="login-header">
+      <mat-card-title>Gerenciamento de Clientes</mat-card-title>
+      <mat-card-subtitle>Faça login para continuar</mat-card-subtitle>
+      <div>
+        <mat-icon class="login-icon">account_balance</mat-icon>
+      </div>
+    </mat-card-header>
+
+    @if (isLoading()) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    }
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>E-mail</mat-label>
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            placeholder="Digite seu e-mail"
+            autocomplete="email"
+          />
+          <mat-icon matSuffix>email</mat-icon>
+          @if (email?.hasError('required')) {
+          <mat-error> E-mail é obrigatório </mat-error>
+          } @if (email?.hasError('email')) {
+          <mat-error> E-mail deve ser válido </mat-error>
+          }
+        </mat-form-field>
+
+        <div class="login-info">
+          <mat-icon>info</mat-icon>
+          <span>Digite um e-mail válido para fazer login</span>
+        </div>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions class="login-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        (click)="onSubmit()"
+        [disabled]="loginForm.invalid || isLoading()"
+        class="login-button"
+      >
+        <mat-icon>{{ isLoading() ? "hourglass_empty" : "login" }}</mat-icon>
+        {{ isLoading() ? "Entrando..." : "Entrar" }}
+      </button>
+    </mat-card-actions>
+
+    <div class="divider-section">
+      <mat-divider></mat-divider>
+      <span class="divider-text">ou</span>
+      <mat-divider></mat-divider>
+    </div>
+
+    <div class="create-account-section">
+      <div class="create-account-content">
+        <div class="create-account-info">
+          <div class="create-account-text">
+            <h3>Novo por aqui?</h3>
+            <p>Crie sua conta e comece a gerenciar seus clientes</p>
+          </div>
+        </div>
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="openCreateAccountModal()"
+          class="create-account-button"
+        >
+          <mat-icon>add_circle_outline</mat-icon>
+          Criar Conta
+        </button>
+      </div>
+    </div>
+  </mat-card>
+
+  <div class="app-info">
+    <h3>Sistema de Gerenciamento de Clientes</h3>
+    <p>Versão 1.0.0 - Desenvolvido por Gabriel</p>
+  </div>
+</div>

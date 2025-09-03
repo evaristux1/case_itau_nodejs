@@ -5,7 +5,9 @@ export interface Customer {
   document: string;
   balanceCents: number;
   version: number;
+  status: string;
   createdAt: string;
+  deletedAt?: string;
   updatedAt: string;
 }
 

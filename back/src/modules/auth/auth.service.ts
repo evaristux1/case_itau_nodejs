@@ -1,6 +1,6 @@
 // src/modules/auth/auth.service.ts
 import { PrismaService } from '@app/shared/infrastructure/prisma/prisma.service';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -22,9 +22,7 @@ export class AuthService {
         });
 
         if (!customer) {
-            throw new UnauthorizedException(
-                'Invalid email or inactive customer',
-            );
+            throw new BadRequestException('Invalid email');
         }
 
         const payload = { sub: customer.id, email: customer.email };

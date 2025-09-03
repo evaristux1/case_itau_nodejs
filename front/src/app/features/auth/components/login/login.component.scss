@@ -1,0 +1,271 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: 50px 50px;
+    opacity: 0.3;
+    animation: float 20s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.login-card {
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 1;
+}
+
+.login-header {
+  text-align: center;
+  padding: 2rem 1.5rem 1rem;
+justify-content: center;
+flex-direction: column-reverse;
+display: flex;
+}
+
+.login-icon {
+  font-size: 3.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  color: var(--mat-sys-primary);
+  margin-bottom: 1rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.login-header mat-card-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--mat-sys-on-surface);
+}
+
+.login-header mat-card-subtitle {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.95rem;
+}
+
+
+
+.login-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  color: var(--mat-sys-on-primary-container);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  border: 1px solid var(--mat-sys-outline-variant);
+
+  mat-icon {
+    font-size: 1.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: -2px;
+    color: var(--mat-sys-primary);
+  }
+}
+
+.login-actions {
+  padding: 0 1.5rem 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.login-button {
+  width: 100%;
+  height: 52px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 26px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+
+  &:hover:not([disabled]) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  mat-icon {
+    margin-right: 0.5rem;
+  }
+}
+
+.divider-section {
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  margin: 1rem 0;
+
+  mat-divider {
+    flex: 1;
+  }
+
+  .divider-text {
+    margin: 0 1rem;
+    font-size: 0.875rem;
+    color: var(--mat-sys-on-surface-variant);
+    font-weight: 500;
+  }
+}
+
+.create-account-section {
+  padding: 1.5rem;
+  background: linear-gradient(145deg,
+    var(--mat-sys-surface-container) 0%,
+    var(--mat-sys-surface-container-low) 100%);
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}
+
+.create-account-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+}
+
+.create-account-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.create-account-icon {
+  font-size: 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--mat-sys-primary);
+  background: var(--mat-sys-primary-container);
+  border-radius: 50%;
+  padding: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.create-account-text {
+  h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--mat-sys-on-surface);
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--mat-sys-on-surface-variant);
+    line-height: 1.4;
+  }
+}
+
+.create-account-button {
+  border-radius: 24px;
+  height: 48px;
+  padding: 0 1.5rem;
+  font-weight: 500;
+  border: 2px solid var(--mat-sys-primary);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  mat-icon {
+    margin-right: 0.5rem;
+  }
+}
+
+mat-progress-bar {
+  margin-bottom: 1rem;
+}
+
+.app-info {
+  text-align: center;
+  margin-top: 2rem;
+  color: white;
+  opacity: 0.9;
+  position: relative;
+  z-index: 1;
+
+  h3 {
+    margin: 0 0 0.5rem 0;
+    font-weight: 400;
+    font-size: 1.1rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+}
+
+// Responsividade
+@media (max-width: 480px) {
+  .login-container {
+    padding: 1rem 0.5rem;
+  }
+
+  .login-card {
+    max-width: 100%;
+    margin: 0 0.5rem;
+  }
+
+  .login-header {
+    padding: 1.5rem 1rem 1rem;
+  }
+
+  .login-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+  }
+
+  mat-card-content {
+    padding: 1rem;
+  }
+
+  .create-account-section {
+    padding: 1rem;
+  }
+}

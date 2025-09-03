@@ -1,4 +1,3 @@
-// src/modules/customers/domain/ports/customer.repository.ts
 import { Customer } from '../entities/customer.entity';
 
 export abstract class CustomerRepository {
@@ -11,7 +10,7 @@ export abstract class CustomerRepository {
 
     abstract update(
         id: number,
-        data: { name?: string; email?: string },
+        data: { name?: string; email?: string; document?: string },
     ): Promise<Customer>;
     abstract delete(id: number): Promise<void>;
     abstract findById(id: number): Promise<Customer | null>;
@@ -22,4 +21,8 @@ export abstract class CustomerRepository {
         currentVersion: number;
         nextBalanceCents: number;
     }): Promise<Customer | null>;
+
+    abstract findByEmail(email: string): Promise<Customer | null>;
+
+    abstract findByDocument(document: string): Promise<Customer | null>;
 }
