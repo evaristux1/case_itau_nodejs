@@ -59,3 +59,4 @@ npm start
 * [Backend (NestJS)](./back/README.md)
 * [Frontend (Angular)](./front/README.md)
 
+* Documentação da API [http://localhost:3000/api/v1/docs](http://localhost:3000/api/v1/docs)
