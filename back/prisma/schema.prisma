@@ -25,7 +25,6 @@ model Customer {
     updatedAt DateTime  @updatedAt @map("updated_at")
     deletedAt DateTime? @map("deleted_at")
 
-    transactions  Transaction[]
     auditLogs     AuditLog[]
     ledgerEntries LedgerEntry[]
 
@@ -35,30 +34,6 @@ model Customer {
     @@map("customers")
 }
 
-model Transaction {
-    id                 String  @id @default(uuid())
-    customerId         Int     @map("customer_id")
-    type               String
-    // se quiser manter em centavos também:
-    amountCents        Int     @default(0) @map("amount_cents")
-    balanceBeforeCents Int     @default(0) @map("balance_before_cents")
-    balanceAfterCents  Int     @default(0) @map("balance_after_cents")
-    description        String?
-
-    metadata String? // JSON serializado
-
-    idempotencyKey String?  @unique @map("idempotency_key")
-    createdAt      DateTime @default(now()) @map("created_at")
-
-    customer    Customer      @relation(fields: [customerId], references: [id])
-    LedgerEntry LedgerEntry[]
-
-    @@index([customerId])
-    @@index([type])
-    @@index([createdAt])
-    @@map("transactions")
-}
-
 model AuditLog {
     id         String @id @default(uuid())
     customerId Int?   @map("customer_id")
@@ -66,7 +41,7 @@ model AuditLog {
     entity     String
     entityId   String @map("entity_id")
 
-    oldValue String? @map("old_value") // JSON serializado
+    oldValue String? @map("old_value")
     newValue String? @map("new_value")
 
     userId    String?  @map("user_id")
@@ -85,23 +60,20 @@ model LedgerEntry {
     id         String @id @default(uuid())
     customerId Int    @map("customer_id")
 
-    // campos que seu repo usa:
     deltaCents     Int
-    type           String // se quiser, troque por enum LedgerType
+    type           String
     idempotencyKey String? @unique @map("idempotency_key")
 
-    // (opcional) estado antes/depois em centavos
     balanceBeforeCents Int? @map("balance_before_cents")
     balanceAfterCents  Int? @map("balance_after_cents")
 
     description   String?
-    metadata      String? // JSON serializado
+    metadata      String?
     transactionId String? @map("transaction_id")
 
     createdAt DateTime @default(now()) @map("created_at")
 
-    customer    Customer     @relation(fields: [customerId], references: [id])
-    transaction Transaction? @relation(fields: [transactionId], references: [id])
+    customer Customer @relation(fields: [customerId], references: [id])
 
     @@index([customerId])
     @@index([transactionId])

@@ -1,59 +1,115 @@
-# Front
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.4.
 
-## Development server
+# 📘 `front/README.md`
 
-To start a local development server, run:
+```markdown
+# 💻 Frontend - Gestão de Clientes (Angular)
 
+Frontend em **Angular 18** que consome a API de Clientes & Saldos.  
+Permite criar clientes, listar, depositar e sacar valores.
+
+---
+
+## 🚀 Tecnologias
+- Angular 18 + TypeScript
+- Angular Material
+- RxJS
+- HttpClient (integração com API)
+
+---
+
+## ⚙️ Rodando localmente
 ```bash
-ng serve
+cd front
+npm install
+npm start
+````
+
+* Front: [http://localhost:4200](http://localhost:4200)
+
+---
+
+## 🔒 Integração & Segurança
+
+* Autenticação JWT → token armazenado e enviado no header Authorization.
+* Interceptors HTTP → adicionam token e tratam erros globais.
+* Validação reativa nos formulários.
+
+---
+
+## 📌 Funcionalidades
+
+* **Login** (gera JWT via API)
+* **Cadastro de clientes**
+* **Listagem de clientes**
+* **Depósitos e saques** com confirmação visual
+* **Feedback ao usuário** (Snackbar/Dialog)
+
+---
+
+## 🌐 Deploy (AWS)
+
+* **Frontend**: hospedado em **S3 + CloudFront**
+* **Integração**: via **ALB** que redireciona requisições ao backend
+* **Segurança extra**: WAF + TLS
+
+---
+
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+# 📘 `front/README.md`
 
-## Code scaffolding
+```markdown
+# 💻 Frontend - Gestão de Clientes (Angular)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Frontend em **Angular 18** que consome a API de Clientes & Saldos.  
+Permite criar clientes, listar, depositar e sacar valores.
 
+---
+
+## 🚀 Tecnologias
+- Angular 18 + TypeScript
+- Angular Material
+- RxJS
+- HttpClient (integração com API)
+
+---
+
+## ⚙️ Rodando localmente
 ```bash
-ng generate component component-name
+cd front
+npm install
+npm start
+````
+
+* Front: [http://localhost:4200](http://localhost:4200)
+
+---
+
+## 🔒 Integração & Segurança
+
+* Autenticação JWT → token armazenado e enviado no header Authorization.
+* Interceptors HTTP → adicionam token e tratam erros globais.
+* Validação reativa nos formulários.
+
+---
+
+## 📌 Funcionalidades
+
+* **Login** (gera JWT via API)
+* **Cadastro de clientes**
+* **Listagem de clientes**
+* **Depósitos e saques** com confirmação visual
+* **Feedback ao usuário** (Snackbar/Dialog)
+
+---
+
+## 🌐 Deploy (AWS)
+
+* **Frontend**: hospedado em **S3 + CloudFront**
+* **Integração**: via **ALB** que redireciona requisições ao backend
+* **Segurança extra**: WAF + TLS
+
+---
+
 ```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

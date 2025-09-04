@@ -17,7 +17,7 @@ export class PrismaLedgerRepository implements LedgerRepository {
     async createEntry(params: {
         customerId: number;
         deltaCents: number;
-        type: LedgerEntryType; // se não usar enum no schema, mantenha string
+        type: LedgerEntryType;
         idempotencyKey?: string | null;
         balanceBeforeCents?: number | null;
         balanceAfterCents?: number | null;
@@ -28,7 +28,7 @@ export class PrismaLedgerRepository implements LedgerRepository {
             data: {
                 customerId: params.customerId,
                 deltaCents: params.deltaCents,
-                type: params.type as any, // se enum no schema, remova o cast
+                type: params.type as any,
                 idempotencyKey: params.idempotencyKey ?? null,
                 balanceBeforeCents: params.balanceBeforeCents ?? null,
                 balanceAfterCents: params.balanceAfterCents ?? null,
