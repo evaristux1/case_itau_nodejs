@@ -33,7 +33,7 @@ npm run start:dev
 
 ## ⚙️ Testes aplicados
 ```bash
-npm run test:2e2
+npm run test:e2e
 npm run test:watch
 ````
 
