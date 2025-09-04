@@ -162,7 +162,8 @@ export class CustomersController {
         },
     })
     async remove(@Param('id', ParseIntPipe) id: number) {
-        return this.deleteCustomer.execute(id);
+        await this.deleteCustomer.execute(id);
+        return { success: true };
     }
 
     @Post(':id/depositar')

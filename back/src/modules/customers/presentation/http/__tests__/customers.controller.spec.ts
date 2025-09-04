@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateCustomerUseCase } from '../../../application/use-cases/create-customer.uc';
+import { DeleteCustomerUseCase } from '../../../application/use-cases/delete-customer.uc';
 import { DepositUseCase } from '../../../application/use-cases/deposit.uc';
 import { GetCustomerUseCase } from '../../../application/use-cases/get-customer.uc';
 import { ListCustomersUseCase } from '../../../application/use-cases/list-customers.uc';
@@ -41,6 +42,7 @@ describe('CustomersController', () => {
                 { provide: CreateCustomerUseCase, useValue: mockUseCases },
                 { provide: DepositUseCase, useValue: mockUseCases },
                 { provide: WithdrawUseCase, useValue: mockUseCases },
+                { provide: DeleteCustomerUseCase, useValue: mockUseCases },
                 { provide: GetCustomerUseCase, useValue: mockUseCases },
                 { provide: ListCustomersUseCase, useValue: mockUseCases },
                 { provide: UpdateCustomerUseCase, useValue: mockUseCases },
@@ -202,11 +204,9 @@ describe('CustomersController', () => {
 
     describe('remove', () => {
         it('should return ok (placeholder)', async () => {
-            // Act
             const result = await controller.remove(1);
 
-            // Assert
-            expect(result).toEqual({ ok: true });
+            expect(result).toEqual({ success: true });
         });
     });
 });

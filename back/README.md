@@ -31,6 +31,12 @@ npm run start:dev
 
 ---
 
+## ⚙️ Testes aplicados
+```bash
+npm run test:2e2
+npm run test:watch
+````
+
 ## 🔒 Segurança aplicada
 
 * **JWT obrigatório** (exceto login e criação de usuário)
@@ -45,11 +51,19 @@ npm run start:dev
 
 * `POST /auth/token` → autenticação (gera JWT)
 * `POST /clientes` → criar cliente
+* `GET /clientes` → obter clientes
 * `GET /clientes/:id` → obter cliente
-* `PUT /clientes/:id/deposit` → depositar
-* `PUT /clientes/:id/withdraw` → sacar
+* `PUTT /clientes/:id` → atualizar cliente
+* `DELETE /clientes/:id` → desativar cliente
+* `POST /clientes/:id/deposit` → depositar
+* `POST /clientes/:id/withdraw` → sacar
 
 ---
+
+# Endpoints
+
+📖 **Documentação  (Swagger):**
+[http://localhost:3000/api/v1/docs](http://localhost:3000/api/v1/docs)
 
 ## 📈 Arquitetura de Produção (AWS)
 
