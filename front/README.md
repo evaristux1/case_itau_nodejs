@@ -1,8 +1,6 @@
 
-
 # 📘 `front/README.md`
 
-```markdown
 # 💻 Frontend - Gestão de Clientes (Angular)
 
 Frontend em **Angular 18** que consome a API de Clientes & Saldos.  
@@ -109,7 +107,3 @@ npm start
 * **Frontend**: hospedado em **S3 + CloudFront**
 * **Integração**: via **ALB** que redireciona requisições ao backend
 * **Segurança extra**: WAF + TLS
-
----
-
-```

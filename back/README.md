@@ -1,8 +1,6 @@
 
-
 # 📘 `back/README.md`
 
-```markdown
 # 🏦 API de Clientes & Saldos (NestJS)
 
 API em **NestJS** para gerenciamento de clientes, saldos e transações.  
@@ -61,4 +59,3 @@ npm run start:dev
 * **Mensageria**: SQS/SNS
 * **Logs & Métricas**: CloudWatch + Grafana + X-Ray
 
----

@@ -1,7 +1,6 @@
 
 # 📘 `README.md` 
 
-````markdown
 # 🏦 Case Técnico - Clientes & Saldos
 
 Este repositório contém duas aplicações:  
@@ -43,7 +42,7 @@ npm start
 
 ---
 
-## ☁️ Deploy na AWS (visão geral)
+
 
 * **Frontend**: hospedado em **S3 + CloudFront** (CDN global).
 * **Backend**: container em **ECS Fargate** ou **EKS** (Kubernetes gerenciado).
@@ -60,4 +59,3 @@ npm start
 * [Backend (NestJS)](./back/README.md)
 * [Frontend (Angular)](./front/README.md)
 
-````
